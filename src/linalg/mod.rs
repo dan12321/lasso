@@ -1,4 +1,5 @@
 use std::ops::{Add, Sub, Mul};
+use rand::distributions::{Distribution, Uniform};
 
 /// A matrix of numbers
 #[derive(Clone)]
@@ -192,6 +193,29 @@ impl<T: Add<Output=T> + Mul<Output=T> + Sub<Output=T> + Copy + Default> Matrix<T
 
 	pub fn height(& self) -> usize {
 		self.size / self.stride
+	}
+}
+
+impl Matrix<f64> {
+	/// Creates a new instance of a matrix using random uniform values
+    ///
+    /// # Arguments
+    ///
+    /// * `width` - The width of the matrix
+	/// * `height` - The height of the matrix
+    /// * `min` - The min element value allowed
+	/// * `max` - The max element value allowed
+	pub fn new_random_fill(width: usize, height: usize, min: f64, max: f64) -> Self {
+		let size = width * height;
+		let stride = width;
+		let mut rng = rand::thread_rng();
+		let range = Uniform::new(min, max);
+		let data: Vec<f64> = (0..size).map(|_| range.sample(&mut rng)).collect();
+		Matrix {
+			data,
+			stride,
+			size
+		}
 	}
 }
 

@@ -171,3 +171,22 @@ fn get_row_out_of_bounds() {
     let result = matrix.row(3);
     assert!(result.is_err());
 }
+
+#[test]
+fn new_random_fill() {
+    let matrix: Matrix<f64> = Matrix::new_random_fill(1000, 1000, 0.0, 1.0);
+    let element = matrix.get(0, 0).unwrap();
+    let mut random = false;
+    for i in 0..matrix.width() {
+        for j in 0..matrix.height() {
+            if element != matrix.get(i, j).unwrap() {
+                random = true;
+                break;
+            }
+        }
+        if random {
+            break;
+        }
+    }
+    assert!(random);
+}
